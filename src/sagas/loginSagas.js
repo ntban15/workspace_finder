@@ -7,18 +7,15 @@ function* authorizeWithFirebase({ payload }) {
   const { email, password } = payload;
   try {
     yield put({ type: LOGIN_PENDING });
-    const { user } = yield call(
+    yield call(
       // provide context for the function with this syntax
       // in this case, firebase.auth() is the context for signInWithEmailAndPassword
       [firebase.auth(), firebase.auth().signInWithEmailAndPassword],
       email, // arguments are passed seperately
       password,
     );
-    const usernameRef = firebase.database().ref(`users/${user.uid}/name`);
-    const dataSnapshot = yield call([usernameRef, usernameRef.once], 'value');
     yield put({
       type: LOGIN_SUCCESS,
-      payload: { token: user.uid, username: dataSnapshot.val() },
     });
   } catch (e) {
     yield put({ type: LOGIN_FAIL, payload: e.message });

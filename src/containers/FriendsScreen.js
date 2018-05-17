@@ -1,6 +1,7 @@
+/* eslint react/prop-types: 0 */
+
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Filter from '../components/friendsScreenComponents/Filter';
@@ -14,6 +15,8 @@ import Header from '../components/common/Header';
 import { setFilter, requestLogin } from '../actions';
 
 import { FILTER_MODE_NEW_FRIENDS, FILTER_MODE_MY_FRIENDS } from '../constants/strings';
+import { SWIPE_HOTGIRL_SCREEN } from '../constants/screens';
+import { MAIN_HIGHLIGHT_COLOR } from '../constants/colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -29,30 +32,26 @@ const styles = StyleSheet.create({
 });
 
 class FriendsScreen extends React.Component {
-  static propTypes = {
-    isLoggingIn: PropTypes.bool.isRequired,
-    isLoggedIn: PropTypes.bool.isRequired,
-    filter: PropTypes.string.isRequired,
-    login: PropTypes.func.isRequired,
-    setFilterAction: PropTypes.func.isRequired,
-    navigation: PropTypes.shape({
-      navigate: PropTypes.func.isRequired,
-    }).isRequired,
-  };
-
   handleNavigateHotgirls = () => {
-    this.props.navigation.navigate('HotgirlsScreen');
+    if (this.props.isLoggedIn) {
+      this.props.navigation.navigate(SWIPE_HOTGIRL_SCREEN);
+    } else {
+      this.loginDialogRef.show(() => {}, (email, password) => this.props.login(email, password));
+    }
   };
 
-  renderRegisterButton = (isLoggedIn, login) => {
-    if (!isLoggedIn) {
+  renderRegisterButton = () => {
+    if (!this.props.isLoggedIn) {
       return (
         <Footer
-          backgroundColor="#0054A5"
+          backgroundColor={MAIN_HIGHLIGHT_COLOR}
           textColor="white"
           text="ĐĂNG NHẬP ĐỂ KẾT BẠN VỚI MỌI NGUỜI"
           onPress={() => {
-            this.loginDialogRef.show(() => {}, (email, password) => login(email, password));
+            this.loginDialogRef.show(
+              () => {},
+              (email, password) => this.props.login(email, password),
+            );
           }}
         />
       );
@@ -61,9 +60,7 @@ class FriendsScreen extends React.Component {
   };
 
   render() {
-    const {
-      isLoggingIn, isLoggedIn, setFilterAction, filter, login,
-    } = this.props;
+    const { isLoggingIn, setFilterAction, filter } = this.props;
     const filterOptions = [
       { id: FILTER_MODE_NEW_FRIENDS, text: 'Bạn mới' },
       { id: FILTER_MODE_MY_FRIENDS, text: 'Bạn của tôi' },
@@ -76,7 +73,7 @@ class FriendsScreen extends React.Component {
             <Filter options={filterOptions} selected={filter} onSelectionChange={setFilterAction} />
           </View>
           <FriendListView />
-          {this.renderRegisterButton(isLoggedIn, login)}
+          {this.renderRegisterButton()}
           <LoginDialog
             ref={(ref) => {
               this.loginDialogRef = ref;
@@ -85,19 +82,19 @@ class FriendsScreen extends React.Component {
         </View>
       );
     }
-    return <LoadingSpinner size="large" color="#0054A5" />;
+    return <LoadingSpinner size="large" color={MAIN_HIGHLIGHT_COLOR} />;
   }
 }
 
 const mapStateToProps = state => ({
   isLoggingIn: state.login.isLoggingIn,
-  isLoggedIn: state.login.token !== '',
+  isLoggedIn: state.login.isLoggedIn,
   filter: state.filter,
 });
 
 const mapDispatchToProps = dispatch => ({
   setFilterAction: mode => dispatch(setFilter(mode)),
-  login: () => dispatch(requestLogin()),
+  login: (email, password) => dispatch(requestLogin(email, password)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FriendsScreen);

@@ -3,18 +3,17 @@ import { LOGIN_PENDING, LOGIN_SUCCESS, LOGIN_FAIL } from '../constants/actionTyp
 const login = (
   state = {
     isLoggingIn: false,
-    token: '',
-    username: '',
+    isLoggedIn: false,
   },
   action,
 ) => {
   switch (action.type) {
     case LOGIN_PENDING:
-      return { ...state, isLoggingIn: true };
+      return { isLoggingIn: true, isLoggedIn: false };
     case LOGIN_SUCCESS:
-      return { isLoggingIn: false, token: action.payload.token, username: action.payload.username };
+      return { isLoggingIn: false, isLoggedIn: true };
     case LOGIN_FAIL:
-      return { ...state, isLoggingIn: false };
+      return { isLoggingIn: false, isLoggedIn: false };
     default:
       return state;
   }

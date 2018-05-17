@@ -2,13 +2,15 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Platform } from 'react-native';
 import PropTypes from 'prop-types';
 
+import { MAIN_HIGHLIGHT_COLOR } from '../../constants/colors';
+
 const styles = StyleSheet.create({
   container: {
     height: 55,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#0054A5',
+    backgroundColor: MAIN_HIGHLIGHT_COLOR,
     paddingLeft: 15,
     paddingRight: 10,
   },
@@ -17,7 +19,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#0054A5',
+    backgroundColor: MAIN_HIGHLIGHT_COLOR,
     paddingTop: 24,
     paddingLeft: 15,
     paddingRight: 10,

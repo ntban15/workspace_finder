@@ -1,34 +1,34 @@
 import { combineReducers } from 'redux';
-// import { persistReducer } from 'redux-persist';
-// import { AsyncStorage } from 'react-native';
+import { persistReducer } from 'redux-persist';
+import { AsyncStorage } from 'react-native';
 import filter from './filter';
 import onboard from './onboard';
 import friends from './friends';
 import login from './login';
 import hotgirls from './hotgirls';
 import comments from './comments';
+import username from './username';
 
-// const rootConfig = {
-//   key: 'root',
-//   storage: AsyncStorage,
-//   whitelist: ['onboard'],
-// };
+const loginConfig = {
+  key: 'login',
+  storage: AsyncStorage,
+  whitelist: ['isLoggedIn'],
+};
 
-// const loginConfig = {
-//   key: 'login',
-//   storage: AsyncStorage,
-//   whitelist: ['isLoggedIn'],
-// };
+const rootConfig = {
+  key: 'root',
+  storage: AsyncStorage,
+  whitelist: ['username'],
+};
 
 const rootReducer = combineReducers({
   filter,
   onboard,
   friends,
-  login,
+  login: persistReducer(loginConfig, login),
   hotgirls,
   comments,
+  username,
 });
 
-export default rootReducer;
-
-// export default persistReducer(rootConfig, rootReducer);
+export default persistReducer(rootConfig, rootReducer);

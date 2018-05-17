@@ -13,6 +13,7 @@ export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_PENDING = 'LOGIN_PENDING';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAIL = 'LOGIN_FAIL';
+export const RECEIVE_USERNAME = 'RECEIVE_USERNAME';
 
 export const SET_FILTER = 'SET_FILTER';
 

@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, Button, Image, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 
+import { MAIN_HIGHLIGHT_COLOR } from '../../constants/colors';
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -58,7 +60,7 @@ const FriendItem = ({ friend, addFriend, removeFriend }) => {
         <Button
           title={isFriend ? 'Hủy' : 'Kết bạn'}
           onPress={() => (isFriend ? removeFriend(id, name) : addFriend(id, name))}
-          color={isFriend ? 'grey' : '#0054A5'}
+          color={isFriend ? 'grey' : MAIN_HIGHLIGHT_COLOR}
         />
       </View>
     </View>

@@ -52,7 +52,7 @@ class FriendListView extends React.PureComponent {
           this.props.requestLogin(email, password);
         },
       );
-    } else if (firebase.auth().currentUser) {
+    } else {
       const { uid } = firebase.auth().currentUser;
       firebase
         .database()
@@ -65,16 +65,14 @@ class FriendListView extends React.PureComponent {
   };
 
   handleRemoveFriend = (id, name) => {
-    if (firebase.auth().currentUser) {
-      const { uid } = firebase.auth().currentUser;
-      firebase
-        .database()
-        .ref(`friends/${uid}/${id}`)
-        .set(null)
-        .then(() => {
-          ToastAndroid.show(`Bạn đã hủy kết bạn với ${name}`, ToastAndroid.SHORT);
-        });
-    }
+    const { uid } = firebase.auth().currentUser;
+    firebase
+      .database()
+      .ref(`friends/${uid}/${id}`)
+      .set(null)
+      .then(() => {
+        ToastAndroid.show(`Bạn đã hủy kết bạn với ${name}`, ToastAndroid.SHORT);
+      });
   };
 
   render() {
@@ -102,7 +100,7 @@ const getVisibleFriends = (filter, newFriends, myFriends) =>
     : newFriends.filter(friend => myFriends.includes(friend.id)));
 
 const mapStateToProps = state => ({
-  isLoggedIn: state.login.token !== '',
+  isLoggedIn: state.login.isLoggedIn,
   friends: getVisibleFriends(state.filter, state.friends.newFriends, state.friends.myFriends),
 });
 
@@ -111,7 +109,7 @@ const mapDispatchToProps = dispatch => ({
   requestMyFriends: () => dispatch(requestMyFriends()),
   stopRequestFriends: () => dispatch(stopRequestFriends()),
   stopRequestMyFriends: () => dispatch(stopRequestMyFriends()),
-  requestLogin: () => dispatch(requestLogin()),
+  requestLogin: (email, password) => dispatch(requestLogin(email, password)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FriendListView);

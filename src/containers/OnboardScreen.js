@@ -1,12 +1,16 @@
+/* eslint react/prop-types: 0 */
+
 import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import LoginDialog from '../components/common/LoginDialog';
 
 import { requestLogin, passOnboard } from '../actions';
+
+import { FRIENDS_SCREEN } from '../constants/screens';
+import { MAIN_HIGHLIGHT_COLOR } from '../constants/colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -17,7 +21,7 @@ const styles = StyleSheet.create({
   appNameStyle: {
     fontSize: 45,
     fontWeight: 'bold',
-    color: '#0054A5',
+    color: MAIN_HIGHLIGHT_COLOR,
   },
   skipLoginStyle: {
     fontSize: 15,
@@ -32,28 +36,10 @@ const styles = StyleSheet.create({
 });
 
 class OnboardScreen extends React.Component {
-  static propTypes = {
-    isLoggingIn: PropTypes.bool.isRequired,
-    isLoggedIn: PropTypes.bool.isRequired,
-    onboard: PropTypes.bool.isRequired,
-    login: PropTypes.func.isRequired,
-    skipLogin: PropTypes.func.isRequired,
-    navigation: PropTypes.shape({
-      navigate: PropTypes.func.isRequired,
-    }).isRequired,
-  };
-
-  componentDidMount() {
-    const { isLoggedIn, onboard, navigation } = this.props;
-    if (isLoggedIn || onboard) {
-      navigation.navigate('FriendsScreen');
-    }
-  }
-
   componentDidUpdate() {
     const { isLoggedIn, onboard, navigation } = this.props;
     if (isLoggedIn || onboard) {
-      navigation.navigate('FriendsScreen');
+      navigation.navigate(FRIENDS_SCREEN);
     }
   }
 
@@ -67,13 +53,19 @@ class OnboardScreen extends React.Component {
   };
 
   render() {
-    const { isLoggingIn, skipLogin } = this.props;
-    if (!isLoggingIn) {
+    const {
+      isLoggingIn, isLoggedIn, onboard, skipLogin,
+    } = this.props;
+    if (!isLoggingIn && !isLoggedIn && !onboard) {
       return (
         <View style={styles.container}>
           <Text style={styles.appNameStyle}>New friends!</Text>
           <View style={styles.btnContainer}>
-            <Button color="#0054A5" title="Đăng nhập" onPress={this.handleLoginPress} />
+            <Button
+              color={MAIN_HIGHLIGHT_COLOR}
+              title="Đăng nhập"
+              onPress={this.handleLoginPress}
+            />
           </View>
           <Text style={styles.skipLoginStyle} onPress={() => skipLogin()}>
             Để lúc khác
@@ -86,13 +78,13 @@ class OnboardScreen extends React.Component {
         </View>
       );
     }
-    return <LoadingSpinner size="large" color="#0054A5" />;
+    return <LoadingSpinner size="large" color={MAIN_HIGHLIGHT_COLOR} />;
   }
 }
 
 const mapStateToProps = state => ({
   isLoggingIn: state.login.isLoggingIn,
-  isLoggedIn: state.login.token !== '',
+  isLoggedIn: state.login.isLoggedIn,
   onboard: state.onboard,
 });
 

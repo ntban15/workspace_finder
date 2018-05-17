@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 
+import { MAIN_HIGHLIGHT_COLOR } from '../../constants/colors';
+
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -14,7 +16,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginRight: 15,
     fontWeight: 'bold',
-    color: '#0054A5',
+    color: MAIN_HIGHLIGHT_COLOR,
   },
 });
 

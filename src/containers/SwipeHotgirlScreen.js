@@ -12,6 +12,7 @@ import AnimatedHeart from '../components/swipeHotgirlScreenComponents/AnimatedHe
 import LoadingSpinner from '../components/common/LoadingSpinner';
 
 import { requestFetchHotgirls, stopRequestHotgirls, removeHotgirl } from '../actions';
+import { MAIN_HIGHLIGHT_COLOR } from '../constants/colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -64,7 +65,7 @@ class SwipeHotGirlScreen extends React.Component {
 
   handleDate = (id) => {
     this.animatedHeartRef.show();
-    const { uid } = firebase.auth().currentUser || { uid: 'notloggedin' };
+    const { uid } = firebase.auth().currentUser;
     firebase
       .database()
       .ref(`dates/${uid}/${id}`)
@@ -115,7 +116,7 @@ class SwipeHotGirlScreen extends React.Component {
         </View>
       );
     }
-    return <LoadingSpinner size="large" color="#0054A5" />;
+    return <LoadingSpinner size="large" color={MAIN_HIGHLIGHT_COLOR} />;
   }
 }
 

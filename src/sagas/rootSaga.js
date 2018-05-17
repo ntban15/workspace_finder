@@ -1,14 +1,14 @@
 import { all } from 'redux-saga/effects';
 import { watchLogin } from './loginSagas';
-import { watchFriends, watchMyFriends } from './friendsSagas';
+import { watchFriendsRequest, watchMyFriendsRequest } from './friendsSagas';
 import { watchFetchHotgirls } from './hotgirlsSagas';
-import { watchCommentsRequest } from './hotgirlCommenstSagas';
+import { watchCommentsRequest } from './hotgirlCommentsSagas';
 
 export default function* rootSaga() {
   yield all([
     watchLogin(),
-    watchFriends(),
-    watchMyFriends(),
+    watchFriendsRequest(),
+    watchMyFriendsRequest(),
     watchFetchHotgirls(),
     watchCommentsRequest(),
   ]);

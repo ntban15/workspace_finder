@@ -3,6 +3,8 @@ import { View, Image, TouchableWithoutFeedback, Text, StyleSheet, Dimensions } f
 
 import CustomTextInput from './CustomTextInput';
 
+import { MAIN_HIGHLIGHT_COLOR } from '../../constants/colors';
+
 const styles = StyleSheet.create({
   outerContainer: {
     position: 'absolute',
@@ -31,7 +33,7 @@ const styles = StyleSheet.create({
   okTextStyle: {
     fontSize: 15,
     fontWeight: 'bold',
-    color: '#0054A5',
+    color: MAIN_HIGHLIGHT_COLOR,
   },
   introImageStyle: {
     width: 200,
@@ -42,7 +44,7 @@ const styles = StyleSheet.create({
   introTextStyle: {
     fontSize: 25,
     fontWeight: 'bold',
-    color: '#0054A5',
+    color: MAIN_HIGHLIGHT_COLOR,
   },
 });
 
@@ -97,7 +99,7 @@ class LoginDialog extends React.Component {
             <CustomTextInput
               width={300}
               placeholder="Email"
-              highlightColor="#0054A5"
+              highlightColor={MAIN_HIGHLIGHT_COLOR}
               highlightTextColor="white"
               onChangeText={(email) => {
                 this.email = email;
@@ -108,7 +110,7 @@ class LoginDialog extends React.Component {
               width={300}
               placeholder="Password"
               secureTextEntry
-              highlightColor="#0054A5"
+              highlightColor={MAIN_HIGHLIGHT_COLOR}
               highlightTextColor="white"
               onChangeText={(password) => {
                 this.password = password;

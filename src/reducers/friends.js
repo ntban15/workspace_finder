@@ -3,6 +3,8 @@ import {
   FRIEND_CHANGED,
   MY_FRIEND_ADDED,
   MY_FRIEND_REMOVED,
+  STOP_FRIENDS_REQUEST,
+  STOP_MY_FRIENDS_REQUEST,
 } from '../constants/actionTypes';
 
 const friends = (
@@ -49,6 +51,16 @@ const friends = (
           return friend;
         }),
         myFriends: state.myFriends.filter(friendId => friendId !== action.payload),
+      };
+    case STOP_FRIENDS_REQUEST:
+      return {
+        ...state,
+        newFriends: [],
+      };
+    case STOP_MY_FRIENDS_REQUEST:
+      return {
+        ...state,
+        myFriends: [],
       };
     default:
       return state;

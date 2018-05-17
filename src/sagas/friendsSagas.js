@@ -1,4 +1,4 @@
-import { take, put, call, fork, cancelled, cancel } from 'redux-saga/effects';
+import { takeLatest, take, put, call, fork, cancelled, cancel } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import firebase from 'firebase';
 
@@ -16,22 +16,19 @@ import {
 function createFetchFriendsChannel() {
   return eventChannel((emit) => {
     const usersRef = firebase.database().ref('users');
-    const { uid } = firebase.auth().currentUser || { uid: 'notloggedin' };
+    const { uid } = firebase.auth().currentUser || { uid: '' };
 
-    const friendAddHandler = (childSnapshot) => {
+    const addListener = usersRef.on('child_added', (childSnapshot) => {
       if (childSnapshot.key !== uid) {
         emit({ type: FRIEND_ADDED, payload: { ...childSnapshot.val(), id: childSnapshot.key } });
       }
-    };
+    });
 
-    const friendChangeHandler = (childSnapshot) => {
+    const changeListener = usersRef.on('child_changed', (childSnapshot) => {
       if (childSnapshot.val().id !== uid) {
         emit({ type: FRIEND_CHANGED, payload: { ...childSnapshot.val(), id: childSnapshot.key } });
       }
-    };
-
-    const addListener = usersRef.on('child_added', friendAddHandler);
-    const changeListener = usersRef.on('child_changed', friendChangeHandler);
+    });
 
     const unsubscribe = () => {
       usersRef.off('child_added', addListener);
@@ -56,21 +53,17 @@ function* watchFriendsChannel() {
   }
 }
 
-function createFetchMyFriendsChannel() {
+function createFetchMyFriendsChannel(uid) {
   return eventChannel((emit) => {
-    const { uid } = firebase.auth().currentUser || { uid: 'notloggedin' };
     const myFriendsRef = firebase.database().ref(`friends/${uid}`);
 
-    const myFriendAddHandler = (childSnapshot) => {
+    const addListener = myFriendsRef.on('child_added', (childSnapshot) => {
       emit({ type: MY_FRIEND_ADDED, payload: childSnapshot.key });
-    };
+    });
 
-    const myFriendRemoveHandler = (oldChildSnapshot) => {
+    const removeListener = myFriendsRef.on('child_removed', (oldChildSnapshot) => {
       emit({ type: MY_FRIEND_REMOVED, payload: oldChildSnapshot.key });
-    };
-
-    const addListener = myFriendsRef.on('child_added', myFriendAddHandler);
-    const removeListener = myFriendsRef.on('child_removed', myFriendRemoveHandler);
+    });
 
     const unsubscribe = () => {
       myFriendsRef.off('child_added', addListener);
@@ -81,8 +74,8 @@ function createFetchMyFriendsChannel() {
   });
 }
 
-function* watchMyFriendsChannel() {
-  const myFriendsChannel = yield call(createFetchMyFriendsChannel);
+function* watchMyFriendsChannel(uid) {
+  const myFriendsChannel = yield call(createFetchMyFriendsChannel, uid);
   try {
     while (true) {
       const action = yield take(myFriendsChannel);
@@ -95,16 +88,38 @@ function* watchMyFriendsChannel() {
   }
 }
 
-export function* watchFriends() {
-  yield take(FRIENDS_REQUEST);
+function* watchFriends() {
   const task = yield fork(watchFriendsChannel);
-  yield take(STOP_FRIENDS_REQUEST);
-  yield cancel(task);
+  try {
+    yield take(STOP_FRIENDS_REQUEST);
+    yield cancel(task);
+  } finally {
+    if (yield cancelled()) {
+      yield cancel(task);
+    }
+  }
 }
 
-export function* watchMyFriends() {
-  yield take(MY_FRIENDS_REQUEST);
-  const task = yield fork(watchMyFriendsChannel);
-  yield take(STOP_MY_FRIENDS_REQUEST);
-  yield cancel(task);
+function* watchMyFriends() {
+  const uid = firebase.auth().currentUser ? firebase.auth().currentUser.uid : '';
+  if (uid === '') {
+    return;
+  }
+  const task = yield fork(watchMyFriendsChannel, uid);
+  try {
+    yield take(STOP_MY_FRIENDS_REQUEST);
+    yield cancel(task);
+  } finally {
+    if (yield cancelled()) {
+      yield cancel(task);
+    }
+  }
+}
+
+export function* watchFriendsRequest() {
+  yield takeLatest(FRIENDS_REQUEST, watchFriends);
+}
+
+export function* watchMyFriendsRequest() {
+  yield takeLatest(MY_FRIENDS_REQUEST, watchMyFriends);
 }
