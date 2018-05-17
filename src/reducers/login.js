@@ -1,4 +1,4 @@
-import { LOGIN_PENDING, LOGIN_SUCCESS, LOGIN_FAIL } from '../actions/types';
+import { LOGIN_PENDING, LOGIN_SUCCESS, LOGIN_FAIL } from '../constants/actionTypes';
 
 const login = (
   state = {

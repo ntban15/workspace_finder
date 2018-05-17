@@ -1,3 +1,3 @@
-import { ONBOARD } from './types';
+import { ONBOARD } from '../constants/actionTypes';
 
 export const passOnboard = () => ({ type: ONBOARD });

@@ -4,7 +4,7 @@ import {
   FETCH_HOTGIRLS_FAIL,
   REMOVE_HOTGIRL,
   HOTGIRL_CHANGED,
-} from '../actions';
+} from '../constants/actionTypes';
 
 const hotgirls = (
   state = {

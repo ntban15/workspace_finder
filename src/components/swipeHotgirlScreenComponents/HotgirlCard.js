@@ -10,8 +10,10 @@ import {
   Dimensions,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import MyButton from './MyButton';
-import CommentsContainer from '../containers/CommentsContainer';
+
+import CommentsView from './CommentsView';
+
+import CustomButton from '../common/CustomButton';
 
 const styles = StyleSheet.create({
   container: {
@@ -63,8 +65,8 @@ const styles = StyleSheet.create({
 });
 
 const isIos = Platform.OS === 'ios';
-const heartIcon = require('../assets/images/heart_icon.png');
-const discardIcon = require('../assets/images/delete_icon.png');
+const heartIcon = require('../../assets/images/heart_icon.png');
+const discardIcon = require('../../assets/images/delete_icon.png');
 
 class HotgirlCard extends React.PureComponent {
   state = {
@@ -108,7 +110,7 @@ class HotgirlCard extends React.PureComponent {
   renderCommentBtn = () => {
     if (!this.state.expanded) {
       return (
-        <MyButton
+        <CustomButton
           onPress={() => {
             this.setState(state => ({ commentEnabled: !state.commentEnabled }));
           }}
@@ -121,7 +123,7 @@ class HotgirlCard extends React.PureComponent {
 
   renderComments = (id) => {
     if (this.state.commentEnabled) {
-      return <CommentsContainer hotgirlId={id} />;
+      return <CommentsView hotgirlId={id} />;
     }
     return null;
   };
@@ -145,9 +147,9 @@ class HotgirlCard extends React.PureComponent {
           {this.renderInfo(name, description)}
 
           <View style={styles.buttonsContainer}>
-            <MyButton onPress={() => onDiscardPress(id)} text="" icon={discardIcon} />
-            <MyButton onPress={() => onDatePress(id)} text="Tôi muốn" textColor="orange" />
-            <MyButton onPress={() => onLovePress(id)} text={`${-hearts}`} icon={heartIcon} />
+            <CustomButton onPress={() => onDiscardPress(id)} text="" icon={discardIcon} />
+            <CustomButton onPress={() => onDatePress(id)} text="Tôi muốn" textColor="orange" />
+            <CustomButton onPress={() => onLovePress(id)} text={`${-hearts}`} icon={heartIcon} />
           </View>
 
           {this.renderCommentBtn()}

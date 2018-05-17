@@ -2,9 +2,11 @@ import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+
+import LoadingSpinner from '../components/common/LoadingSpinner';
+import LoginDialog from '../components/common/LoginDialog';
+
 import { requestLogin, passOnboard } from '../actions';
-import LoadingSpinner from '../components/LoadingSpinner';
-import LoginDialog from '../components/LoginDialog';
 
 const styles = StyleSheet.create({
   container: {

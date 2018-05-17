@@ -1,4 +1,9 @@
-import { FRIEND_ADDED, FRIEND_CHANGED, MY_FRIEND_ADDED, MY_FRIEND_REMOVED } from '../actions';
+import {
+  FRIEND_ADDED,
+  FRIEND_CHANGED,
+  MY_FRIEND_ADDED,
+  MY_FRIEND_REMOVED,
+} from '../constants/actionTypes';
 
 const friends = (
   state = {

@@ -59,7 +59,7 @@ const renderText = (text, size, textColor) => {
   return null;
 };
 
-const MyButton = ({
+const CustomButton = ({
   onPress, text, icon, color, size, textColor,
 }) => (
   <TouchableOpacity onPress={onPress}>
@@ -70,7 +70,7 @@ const MyButton = ({
   </TouchableOpacity>
 );
 
-MyButton.propTypes = {
+CustomButton.propTypes = {
   onPress: PropTypes.func,
   text: PropTypes.string,
   icon: PropTypes.node,
@@ -79,7 +79,7 @@ MyButton.propTypes = {
   size: PropTypes.string,
 };
 
-MyButton.defaultProps = {
+CustomButton.defaultProps = {
   onPress: () => {},
   text: '',
   icon: null,
@@ -88,4 +88,4 @@ MyButton.defaultProps = {
   size: 'small',
 };
 
-export default MyButton;
+export default CustomButton;

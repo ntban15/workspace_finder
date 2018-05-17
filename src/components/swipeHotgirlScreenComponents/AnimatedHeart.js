@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const loveImg = require('../assets/images/loveicon.png');
+const loveImg = require('../../assets/images/loveicon.png');
 
 class AnimatedHeart extends Component {
   static propTypes = {

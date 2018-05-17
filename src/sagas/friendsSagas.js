@@ -1,6 +1,7 @@
 import { take, put, call, fork, cancelled, cancel } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import firebase from 'firebase';
+
 import {
   FRIEND_ADDED,
   FRIEND_CHANGED,
@@ -10,7 +11,7 @@ import {
   MY_FRIENDS_REQUEST,
   STOP_FRIENDS_REQUEST,
   STOP_MY_FRIENDS_REQUEST,
-} from '../actions/types';
+} from '../constants/actionTypes';
 
 function createFetchFriendsChannel() {
   return eventChannel((emit) => {

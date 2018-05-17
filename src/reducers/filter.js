@@ -1,6 +1,7 @@
-import { SET_FILTER } from '../actions/types';
+import { SET_FILTER } from '../constants/actionTypes';
+import { FILTER_MODE_NEW_FRIENDS } from '../constants/strings';
 
-const filter = (state = 'NEW_FRIENDS', action) => {
+const filter = (state = FILTER_MODE_NEW_FRIENDS, action) => {
   switch (action.type) {
     case SET_FILTER:
       return action.payload;

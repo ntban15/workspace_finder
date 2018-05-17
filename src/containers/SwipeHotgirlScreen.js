@@ -1,12 +1,17 @@
+/* eslint no-unused-expressions: 0 */
+
 import React from 'react';
 import firebase from 'firebase';
 import { connect } from 'react-redux';
 import { FlatList, View, LayoutAnimation, UIManager, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
+
+import HotgirlCard from '../components/swipeHotgirlScreenComponents/HotgirlCard';
+import AnimatedHeart from '../components/swipeHotgirlScreenComponents/AnimatedHeart';
+
+import LoadingSpinner from '../components/common/LoadingSpinner';
+
 import { requestFetchHotgirls, stopRequestHotgirls, removeHotgirl } from '../actions';
-import HotgirlCard from '../components/HotgirlCard';
-import LoadingSpinner from '../components/LoadingSpinner';
-import AnimatedHeart from '../components/AnimatedHeart';
 
 const styles = StyleSheet.create({
   container: {

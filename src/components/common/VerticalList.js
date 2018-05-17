@@ -1,8 +1,12 @@
 import React from 'react';
 import { FlatList, View, StyleSheet, Text } from 'react-native';
 import PropTypes from 'prop-types';
-import FriendItem from './FriendItem';
-import CommentItem from './CommentItem';
+
+import FriendItem from '../friendsScreenComponents/FriendItem';
+
+import CommentItem from '../swipeHotgirlScreenComponents/CommentItem';
+
+import { VERTICAL_LIST_MODE_FRIEND, VERTICAL_LIST_MODE_COMMENT } from '../../constants/strings';
 
 const styles = StyleSheet.create({
   separatorStyle: {
@@ -31,16 +35,16 @@ export default class VerticalList extends React.PureComponent {
   static propTypes = {
     comments: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.string,
-      author: PropTypes.string,
       authorName: PropTypes.string,
+      author: PropTypes.string,
       body: PropTypes.string,
     })),
     friends: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.string.isRequired,
-      avatar: PropTypes.string,
       name: PropTypes.string.isRequired,
-      description: PropTypes.string,
       isFriend: PropTypes.bool.isRequired,
+      description: PropTypes.string,
+      avatar: PropTypes.string,
     })),
     removeFriend: PropTypes.func,
     addFriend: PropTypes.func,
@@ -58,7 +62,7 @@ export default class VerticalList extends React.PureComponent {
 
   renderItem = (item, type) => {
     switch (type) {
-      case 'FRIEND':
+      case VERTICAL_LIST_MODE_FRIEND:
         return (
           <FriendItem
             friend={item}
@@ -66,7 +70,7 @@ export default class VerticalList extends React.PureComponent {
             addFriend={this.props.addFriend}
           />
         );
-      case 'COMMENT':
+      case VERTICAL_LIST_MODE_COMMENT:
         return <CommentItem comment={item} />;
       default:
         return null;
@@ -77,10 +81,14 @@ export default class VerticalList extends React.PureComponent {
 
   renderEmpty = type => (
     <View
-      style={type === 'FRIEND' ? styles.emptyTextContainerWithPadding : styles.emptyTextContainer}
+      style={
+        type === VERTICAL_LIST_MODE_FRIEND
+          ? styles.emptyTextContainerWithPadding
+          : styles.emptyTextContainer
+      }
     >
       <Text style={styles.emptyTextStyle}>
-        {type === 'FRIEND' ? 'Không có nguời bạn nào' : 'Không có comment nào'}
+        {type === VERTICAL_LIST_MODE_FRIEND ? 'Không có nguời bạn nào' : 'Không có comment nào'}
       </Text>
     </View>
   );
@@ -92,7 +100,7 @@ export default class VerticalList extends React.PureComponent {
 
     return (
       <FlatList
-        data={type === 'FRIEND' ? friends : comments}
+        data={type === VERTICAL_LIST_MODE_FRIEND ? friends : comments}
         keyExtractor={this.keyExtractor}
         renderItem={({ item }) => this.renderItem(item, type)}
         ItemSeparatorComponent={this.renderSeparator}

@@ -3,10 +3,14 @@ import { View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import firebase from 'firebase';
-import CommentsList from '../components/VerticalList';
-import CustomTextInput from '../components/CustomTextInput';
-import MyButton from '../components/MyButton';
-import { requestHotgirlComments, stopRequestHotgirlComments } from '../actions';
+
+import VerticalList from '../common/VerticalList';
+import CustomTextInput from '../common/CustomTextInput';
+import CustomButton from '../common/CustomButton';
+
+import { requestHotgirlComments, stopRequestHotgirlComments } from '../../actions';
+
+import { VERTICAL_LIST_MODE_COMMENT } from '../../constants/strings';
 
 const styles = StyleSheet.create({
   commentInputContainer: {
@@ -20,14 +24,14 @@ const styles = StyleSheet.create({
   },
 });
 
-class CommentsContainer extends React.Component {
+class CommentsView extends React.Component {
   static propTypes = {
     token: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
     comments: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.string,
-      author: PropTypes.string,
       authorName: PropTypes.string,
+      author: PropTypes.string,
       body: PropTypes.string,
     })).isRequired,
     hotgirlId: PropTypes.string.isRequired,
@@ -56,7 +60,7 @@ class CommentsContainer extends React.Component {
   render() {
     return (
       <View style={styles.commentsContainer}>
-        <CommentsList comments={this.props.comments} type="COMMENT" />
+        <VerticalList comments={this.props.comments} type={VERTICAL_LIST_MODE_COMMENT} />
         <View style={styles.commentInputContainer}>
           <CustomTextInput
             highlightColor="white"
@@ -68,7 +72,7 @@ class CommentsContainer extends React.Component {
             }}
           />
 
-          <MyButton
+          <CustomButton
             text="Gửi"
             color="#0054A5"
             textColor="white"
@@ -91,4 +95,4 @@ const mapDispatchToProps = dispatch => ({
   stopRequestHotgirlComments: id => dispatch(stopRequestHotgirlComments(id)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CommentsContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(CommentsView);

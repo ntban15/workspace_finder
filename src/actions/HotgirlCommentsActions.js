@@ -1,4 +1,4 @@
-import { REQUEST_HOTGIRL_COMMENTS, STOP_REQUEST_HOTGIRL_COMMENTS } from '.';
+import { REQUEST_HOTGIRL_COMMENTS, STOP_REQUEST_HOTGIRL_COMMENTS } from '../constants/actionTypes';
 
 export const requestHotgirlComments = id => ({ type: REQUEST_HOTGIRL_COMMENTS, payload: id });
 

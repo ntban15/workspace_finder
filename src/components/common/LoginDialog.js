@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Image, TouchableWithoutFeedback, Text, StyleSheet, Dimensions } from 'react-native';
+
 import CustomTextInput from './CustomTextInput';
 
 const styles = StyleSheet.create({
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const friendsImg = require('../assets/images/friends.png');
+const friendsImg = require('../../assets/images/friends.png');
 
 class LoginDialog extends React.Component {
   state = {

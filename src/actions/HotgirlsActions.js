@@ -1,4 +1,8 @@
-import { REMOVE_HOTGIRL, REQUEST_FETCH_HOTGIRLS, STOP_REQUEST_HOTGIRLS } from '../actions';
+import {
+  REMOVE_HOTGIRL,
+  REQUEST_FETCH_HOTGIRLS,
+  STOP_REQUEST_HOTGIRLS,
+} from '../constants/actionTypes';
 
 export const stopRequestHotgirls = () => ({ type: STOP_REQUEST_HOTGIRLS });
 

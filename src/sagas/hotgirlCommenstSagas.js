@@ -1,7 +1,12 @@
 import { take, takeEvery, put, call, fork, cancelled, cancel } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import firebase from 'firebase';
-import { REQUEST_HOTGIRL_COMMENTS, STOP_REQUEST_HOTGIRL_COMMENTS, NEW_COMMENT } from '../actions';
+
+import {
+  REQUEST_HOTGIRL_COMMENTS,
+  STOP_REQUEST_HOTGIRL_COMMENTS,
+  NEW_COMMENT,
+} from '../constants/actionTypes';
 
 function createCommentsChannel(id) {
   return eventChannel((emit) => {

@@ -1,6 +1,7 @@
 import { take, call, put, fork, cancelled, cancel } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import firebase from 'firebase';
+
 import {
   HOTGIRL_CHANGED,
   STOP_REQUEST_HOTGIRLS,
@@ -8,7 +9,7 @@ import {
   FETCH_HOTGIRLS_SUCCESS,
   FETCH_HOTGIRLS_FAIL,
   FETCH_HOTGIRLS_PENDING,
-} from '../actions';
+} from '../constants/actionTypes';
 
 function createHotgirlsChannel() {
   return eventChannel((emit) => {

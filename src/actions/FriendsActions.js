@@ -3,7 +3,7 @@ import {
   MY_FRIENDS_REQUEST,
   STOP_FRIENDS_REQUEST,
   STOP_MY_FRIENDS_REQUEST,
-} from './types';
+} from '../constants/actionTypes';
 
 export const requestFriends = () => ({ type: FRIENDS_REQUEST });
 

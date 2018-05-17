@@ -1,4 +1,4 @@
-import { NEW_COMMENT, STOP_REQUEST_HOTGIRL_COMMENTS } from '../actions';
+import { NEW_COMMENT, STOP_REQUEST_HOTGIRL_COMMENTS } from '../constants/actionTypes';
 
 const comments = (state = [], action) => {
   switch (action.type) {

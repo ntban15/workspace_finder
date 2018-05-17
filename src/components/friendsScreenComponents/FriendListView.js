@@ -3,25 +3,29 @@ import { View, ToastAndroid } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import firebase from 'firebase';
-import FriendList from '../components/VerticalList';
-import LoginDialog from '../components/LoginDialog';
+
+import VerticalList from '../common/VerticalList';
+import LoginDialog from '../common/LoginDialog';
+
 import {
   requestFriends,
   requestMyFriends,
   stopRequestFriends,
   stopRequestMyFriends,
   requestLogin,
-} from '../actions';
+} from '../../actions';
 
-class FriendListContainer extends React.Component {
+import { FILTER_MODE_NEW_FRIENDS, VERTICAL_LIST_MODE_FRIEND } from '../../constants/strings';
+
+class FriendListView extends React.PureComponent {
   static propTypes = {
     isLoggedIn: PropTypes.bool.isRequired,
     friends: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.string.isRequired,
-      avatar: PropTypes.string,
       name: PropTypes.string.isRequired,
-      description: PropTypes.string,
       isFriend: PropTypes.bool.isRequired,
+      description: PropTypes.string,
+      avatar: PropTypes.string,
     })).isRequired,
     requestFriends: PropTypes.func.isRequired,
     requestMyFriends: PropTypes.func.isRequired,
@@ -76,11 +80,11 @@ class FriendListContainer extends React.Component {
   render() {
     return (
       <View>
-        <FriendList
+        <VerticalList
           friends={this.props.friends}
           addFriend={this.handleAddFriend}
           removeFriend={this.handleRemoveFriend}
-          type="FRIEND"
+          type={VERTICAL_LIST_MODE_FRIEND}
         />
         <LoginDialog
           ref={(ref) => {
@@ -93,7 +97,7 @@ class FriendListContainer extends React.Component {
 }
 
 const getVisibleFriends = (filter, newFriends, myFriends) =>
-  (filter === 'NEW_FRIENDS'
+  (filter === FILTER_MODE_NEW_FRIENDS
     ? newFriends
     : newFriends.filter(friend => myFriends.includes(friend.id)));
 
@@ -110,4 +114,4 @@ const mapDispatchToProps = dispatch => ({
   requestLogin: () => dispatch(requestLogin()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(FriendListContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(FriendListView);

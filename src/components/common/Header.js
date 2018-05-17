@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
 
 const isIos = Platform.OS === 'ios';
 
-const fireImg = require('../assets/images/hotgirlicon.png');
+const fireImg = require('../../assets/images/hotgirlicon.png');
 
 const Header = ({ headerText, onHeaderButtonPress }) => (
   <View style={isIos ? styles.containerIos : styles.container}>
