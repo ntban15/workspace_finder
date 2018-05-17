@@ -1,0 +1,3 @@
+rootProject.name = 'baitap2'
+
+include ':app'
