@@ -57,4 +57,3 @@ buck-out/
 
 # My ignore
 .vscode
-src/constants/apis.js
