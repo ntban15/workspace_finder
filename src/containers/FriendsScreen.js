@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
     marginLeft: 15,
+    marginRight: 15,
   },
   logoutBtnStyle: {
     fontSize: 15,

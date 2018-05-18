@@ -4,6 +4,7 @@
 * Support logging out
 * Clear text and scroll to last on new comment submitted
 * Text inputs avoid keyboard
+* Add swiping interactions for Hotgirl Cards
 
 # 2018-05-17
 

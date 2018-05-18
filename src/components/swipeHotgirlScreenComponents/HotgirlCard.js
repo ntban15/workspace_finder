@@ -68,11 +68,19 @@ const isIos = Platform.OS === 'ios';
 const heartIcon = require('../../assets/images/heart_icon.png');
 const discardIcon = require('../../assets/images/delete_icon.png');
 
-class HotgirlCard extends React.PureComponent {
+class HotgirlCard extends React.Component {
   state = {
     commentEnabled: false,
     expanded: false,
   };
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return (
+      this.state.commentEnabled !== nextState.commentEnabled ||
+      this.state.expanded !== nextState.expanded ||
+      this.props.hotgirl !== nextProps.hotgirl
+    );
+  }
 
   handleExpand = () => {
     if (isIos) {
@@ -135,10 +143,10 @@ class HotgirlCard extends React.PureComponent {
     const {
       id, name, description, hearts, picture,
     } = hotgirl;
-    const { width } = Dimensions.get('window');
+    const { width, height } = Dimensions.get('window');
 
     return (
-      <View style={[styles.container, { width: width - 40 }]}>
+      <View style={[styles.container, { width: width - 40, height: height - 40 }]}>
         <TouchableWithoutFeedback onPress={this.handleExpand}>
           <Image style={styles.backgroundImageStyle} source={{ uri: picture }} />
         </TouchableWithoutFeedback>
