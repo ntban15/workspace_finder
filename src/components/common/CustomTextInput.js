@@ -40,6 +40,10 @@ export default class CustomTextInput extends React.PureComponent {
     text: '',
   };
 
+  clear = () => {
+    this.setState({ text: '' });
+  };
+
   render() {
     const {
       highlightColor,

@@ -1,2 +1,2 @@
-export const MAIN_HIGHLIGHT_COLOR = 'red';
+export const MAIN_HIGHLIGHT_COLOR = '#0054A5';
 // #0054A5

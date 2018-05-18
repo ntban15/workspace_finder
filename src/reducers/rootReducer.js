@@ -18,7 +18,7 @@ const loginConfig = {
 const rootConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['username'],
+  whitelist: ['username', 'onboard'],
 };
 
 const rootReducer = combineReducers({

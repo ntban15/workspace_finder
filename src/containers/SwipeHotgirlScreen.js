@@ -3,11 +3,10 @@
 import React from 'react';
 import firebase from 'firebase';
 import { connect } from 'react-redux';
-import { FlatList, View, LayoutAnimation, UIManager, StyleSheet } from 'react-native';
+import { FlatList, View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 
 import HotgirlCard from '../components/swipeHotgirlScreenComponents/HotgirlCard';
-import AnimatedHeart from '../components/swipeHotgirlScreenComponents/AnimatedHeart';
 
 import LoadingSpinner from '../components/common/LoadingSpinner';
 
@@ -22,9 +21,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
 });
-
-UIManager.setLayoutAnimationEnabledExperimental &&
-  UIManager.setLayoutAnimationEnabledExperimental(true);
 
 class SwipeHotGirlScreen extends React.Component {
   static propTypes = {
@@ -49,10 +45,6 @@ class SwipeHotGirlScreen extends React.Component {
     return this.props.hotgirls !== nextProps.hotgirls;
   }
 
-  componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
-  }
-
   componentDidUpdate() {
     if (this.props.hotgirls.length === 0) {
       this.props.requestFetchHotgirls();
@@ -64,7 +56,6 @@ class SwipeHotGirlScreen extends React.Component {
   }
 
   handleDate = (id) => {
-    this.animatedHeartRef.show();
     const { uid } = firebase.auth().currentUser;
     firebase
       .database()
@@ -107,11 +98,6 @@ class SwipeHotGirlScreen extends React.Component {
             horizontal
             keyExtractor={this.keyExtractor}
             scrollEnabled={false}
-          />
-          <AnimatedHeart
-            ref={(ref) => {
-              this.animatedHeartRef = ref;
-            }}
           />
         </View>
       );

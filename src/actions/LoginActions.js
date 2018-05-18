@@ -1,4 +1,4 @@
-import { LOGIN_REQUEST } from '../constants/actionTypes';
+import { LOGIN_REQUEST, LOGOUT_REQUEST } from '../constants/actionTypes';
 
 export const requestLogin = (email, password) => ({
   type: LOGIN_REQUEST,
@@ -7,3 +7,5 @@ export const requestLogin = (email, password) => ({
     password,
   },
 });
+
+export const requestLogout = () => ({ type: LOGOUT_REQUEST });

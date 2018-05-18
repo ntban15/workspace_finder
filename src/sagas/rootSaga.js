@@ -1,5 +1,5 @@
 import { all } from 'redux-saga/effects';
-import { watchLogin } from './loginSagas';
+import { watchLogin, watchLogout } from './loginSagas';
 import { watchFriendsRequest, watchMyFriendsRequest } from './friendsSagas';
 import { watchFetchHotgirls } from './hotgirlsSagas';
 import { watchCommentsRequest } from './hotgirlCommentsSagas';
@@ -11,5 +11,6 @@ export default function* rootSaga() {
     watchMyFriendsRequest(),
     watchFetchHotgirls(),
     watchCommentsRequest(),
+    watchLogout(),
   ]);
 }

@@ -1,5 +1,13 @@
 import React from 'react';
-import { View, Image, TouchableWithoutFeedback, Text, StyleSheet, Dimensions } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  View,
+  Image,
+  TouchableWithoutFeedback,
+  Text,
+  StyleSheet,
+  Dimensions,
+} from 'react-native';
 
 import CustomTextInput from './CustomTextInput';
 
@@ -87,7 +95,11 @@ class LoginDialog extends React.Component {
 
     if (this.state.visible) {
       return (
-        <View style={[outerContainer, { width, height }]}>
+        <KeyboardAvoidingView
+          style={[outerContainer, { width, height }]}
+          behavior="padding"
+          enabled
+        >
           <TouchableWithoutFeedback onPress={this.handleCancel}>
             <View style={[outerContainer, { width, height }]} />
           </TouchableWithoutFeedback>
@@ -125,7 +137,7 @@ class LoginDialog extends React.Component {
               </Text>
             </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       );
     }
     return <View />;

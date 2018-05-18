@@ -48,6 +48,7 @@ class OnboardScreen extends React.Component {
       () => {},
       (email, password) => {
         this.props.login(email, password);
+        this.props.skipLogin();
       },
     );
   };

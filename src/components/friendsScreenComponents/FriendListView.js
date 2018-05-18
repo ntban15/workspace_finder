@@ -54,10 +54,14 @@ class FriendListView extends React.PureComponent {
       );
     } else {
       const { uid } = firebase.auth().currentUser;
+      const friendUpdates = {
+        [`${uid}/${id}`]: true,
+        [`${id}/${uid}`]: true,
+      };
       firebase
         .database()
-        .ref(`friends/${uid}/${id}`)
-        .set(true)
+        .ref('friends')
+        .update(friendUpdates)
         .then(() => {
           ToastAndroid.show(`Bạn đã kết bạn với ${name}`, ToastAndroid.SHORT);
         });
@@ -66,10 +70,14 @@ class FriendListView extends React.PureComponent {
 
   handleRemoveFriend = (id, name) => {
     const { uid } = firebase.auth().currentUser;
+    const friendUpdates = {
+      [`${uid}/${id}`]: null,
+      [`${id}/${uid}`]: null,
+    };
     firebase
       .database()
-      .ref(`friends/${uid}/${id}`)
-      .set(null)
+      .ref('friends')
+      .update(friendUpdates)
       .then(() => {
         ToastAndroid.show(`Bạn đã hủy kết bạn với ${name}`, ToastAndroid.SHORT);
       });

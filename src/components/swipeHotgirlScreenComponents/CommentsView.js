@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { KeyboardAvoidingView, View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import firebase from 'firebase';
@@ -64,26 +64,41 @@ class CommentsView extends React.Component {
         .once('value')
         .then((dataSnapshot) => {
           this.props.receiveUsername(dataSnapshot.val());
-          this.commentsRef.push({
-            author: uid,
-            authorName: dataSnapshot.val(),
-            body: this.comment,
-          });
+          this.commentsRef
+            .push({
+              author: uid,
+              authorName: dataSnapshot.val(),
+              body: this.comment,
+            })
+            .then(() => {
+              this.verticalList.scrollToEnd();
+            });
         })
         .catch(() => {}); // TODO: HANDLE SUBMIT ERROR
     } else {
-      this.commentsRef.push({
-        author: uid,
-        authorName: this.props.username,
-        body: this.comment,
-      });
+      this.commentsRef
+        .push({
+          author: uid,
+          authorName: this.props.username,
+          body: this.comment,
+        })
+        .then(() => {
+          this.verticalList.scrollToEnd();
+        });
     }
+    this.customTextInput.clear();
   };
 
   render() {
     return (
-      <View style={styles.commentsContainer}>
-        <VerticalList comments={this.props.comments} type={VERTICAL_LIST_MODE_COMMENT} />
+      <KeyboardAvoidingView style={styles.commentsContainer} behavior="padding" enabled>
+        <VerticalList
+          comments={this.props.comments}
+          type={VERTICAL_LIST_MODE_COMMENT}
+          ref={(ref) => {
+            this.verticalList = ref;
+          }}
+        />
         <View style={styles.commentInputContainer}>
           <CustomTextInput
             highlightColor="white"
@@ -92,6 +107,9 @@ class CommentsView extends React.Component {
             width={200}
             onChangeText={(comment) => {
               this.comment = comment;
+            }}
+            ref={(ref) => {
+              this.customTextInput = ref;
             }}
           />
 
@@ -102,7 +120,7 @@ class CommentsView extends React.Component {
             onPress={() => this.handleCommentSubmit()}
           />
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }

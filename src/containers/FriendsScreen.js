@@ -1,7 +1,7 @@
 /* eslint react/prop-types: 0 */
 
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import Filter from '../components/friendsScreenComponents/Filter';
@@ -12,7 +12,7 @@ import LoadingSpinner from '../components/common/LoadingSpinner';
 import LoginDialog from '../components/common/LoginDialog';
 import Header from '../components/common/Header';
 
-import { setFilter, requestLogin } from '../actions';
+import { setFilter, requestLogin, requestLogout } from '../actions';
 
 import { FILTER_MODE_NEW_FRIENDS, FILTER_MODE_MY_FRIENDS } from '../constants/strings';
 import { SWIPE_HOTGIRL_SCREEN } from '../constants/screens';
@@ -25,9 +25,16 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'stretch',
   },
-  filterContainer: {
+  optionsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginTop: 20,
     marginLeft: 15,
+  },
+  logoutBtnStyle: {
+    fontSize: 15,
+    color: MAIN_HIGHLIGHT_COLOR,
   },
 });
 
@@ -59,6 +66,17 @@ class FriendsScreen extends React.Component {
     return <View />;
   };
 
+  renderLogoutButton = () => {
+    if (this.props.isLoggedIn) {
+      return (
+        <Text style={styles.logoutBtnStyle} onPress={() => this.props.logout()}>
+          Logout
+        </Text>
+      );
+    }
+    return null;
+  };
+
   render() {
     const { isLoggingIn, setFilterAction, filter } = this.props;
     const filterOptions = [
@@ -69,8 +87,9 @@ class FriendsScreen extends React.Component {
       return (
         <View style={styles.container}>
           <Header headerText="New friends" onHeaderButtonPress={this.handleNavigateHotgirls} />
-          <View style={styles.filterContainer}>
+          <View style={styles.optionsContainer}>
             <Filter options={filterOptions} selected={filter} onSelectionChange={setFilterAction} />
+            {this.renderLogoutButton()}
           </View>
           <FriendListView />
           {this.renderRegisterButton()}
@@ -95,6 +114,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setFilterAction: mode => dispatch(setFilter(mode)),
   login: (email, password) => dispatch(requestLogin(email, password)),
+  logout: () => dispatch(requestLogout()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FriendsScreen);

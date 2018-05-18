@@ -58,6 +58,10 @@ export default class VerticalList extends React.PureComponent {
     addFriend: () => {},
   };
 
+  scrollToEnd = () => {
+    this.flatList.scrollToEnd();
+  };
+
   keyExtractor = item => item.id;
 
   renderItem = (item, type) => {
@@ -106,6 +110,9 @@ export default class VerticalList extends React.PureComponent {
         ItemSeparatorComponent={this.renderSeparator}
         ListEmptyComponent={() => this.renderEmpty(type)}
         ListFooterComponent={this.renderFooter}
+        ref={(ref) => {
+          this.flatList = ref;
+        }}
       />
     );
   }

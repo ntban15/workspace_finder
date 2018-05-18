@@ -1,7 +1,16 @@
 import { takeLatest, put, call } from 'redux-saga/effects';
 import firebase from 'firebase';
 
-import { LOGIN_REQUEST, LOGIN_PENDING, LOGIN_SUCCESS, LOGIN_FAIL } from '../constants/actionTypes';
+import {
+  LOGIN_REQUEST,
+  LOGIN_PENDING,
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
+  LOGOUT_REQUEST,
+  LOGOUT_SUCCESS,
+  LOGOUT_FAIL,
+  LOGOUT_PENDING,
+} from '../constants/actionTypes';
 
 function* authorizeWithFirebase({ payload }) {
   const { email, password } = payload;
@@ -24,4 +33,18 @@ function* authorizeWithFirebase({ payload }) {
 
 export function* watchLogin() {
   yield takeLatest(LOGIN_REQUEST, authorizeWithFirebase);
+}
+
+function* logoutFirebase() {
+  try {
+    yield put({ type: LOGOUT_PENDING });
+    yield call([firebase.auth(), firebase.auth().signOut]);
+    yield put({ type: LOGOUT_SUCCESS });
+  } catch (e) {
+    yield put({ type: LOGOUT_FAIL, payload: e.message });
+  }
+}
+
+export function* watchLogout() {
+  yield takeLatest(LOGOUT_REQUEST, logoutFirebase);
 }

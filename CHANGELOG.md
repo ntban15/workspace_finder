@@ -1,3 +1,10 @@
+# 2018-05-18
+
+* Support mutually adding friends
+* Support logging out
+* Clear text and scroll to last on new comment submitted
+* Text inputs avoid keyboard
+
 # 2018-05-17
 
 * Restructure project folders
