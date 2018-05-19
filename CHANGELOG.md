@@ -1,3 +1,10 @@
+# 2018-05-19
+
+* Preload image of next hotgirl in SwipeHotgirlScreen
+* Delay swiping until threshold to keep scrolling comments smooth
+* Make Hotgirl Card dimensions constants
+* Comment TextInput is now hidden by keyboard again. Need fixing.
+
 # 2018-05-18
 
 * Support mutually adding friends

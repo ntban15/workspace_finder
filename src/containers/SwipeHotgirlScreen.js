@@ -3,19 +3,25 @@
 import React from 'react';
 import firebase from 'firebase';
 import { connect } from 'react-redux';
-import { View, Animated, PanResponder, Dimensions, StyleSheet } from 'react-native';
+import { View, Image, Animated, PanResponder, Dimensions, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 
 import HotgirlCard from '../components/swipeHotgirlScreenComponents/HotgirlCard';
 
 import LoadingSpinner from '../components/common/LoadingSpinner';
-
-import { requestFetchHotgirls, stopRequestHotgirls, removeHotgirl } from '../actions';
-import { MAIN_HIGHLIGHT_COLOR } from '../constants/colors';
 import CustomButton from '../components/common/CustomButton';
 
-const SCREEN_WIDTH = Dimensions.get('screen').width;
-const SCREEN_HEIGHT = Dimensions.get('screen').height;
+import { requestFetchHotgirls, stopRequestHotgirls, removeHotgirl } from '../actions';
+
+import { MAIN_HIGHLIGHT_COLOR } from '../constants/colors';
+import {
+  HOTGIRL_CARD_HEIGHT,
+  HOTGIRL_CARD_WIDTH,
+  HOTGIRL_CARD_BORDER_RADIUS,
+} from '../constants/dimensions';
+
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SWIPE_THRESHOLD = SCREEN_WIDTH / 2;
 const RADIUS = SCREEN_HEIGHT / 2;
 const MAX_RAD = Math.asin(SCREEN_WIDTH / 2 / RADIUS) * (180 / Math.PI).toFixed(0);
@@ -36,12 +42,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
   },
+  animatedContainer: {
+    height: HOTGIRL_CARD_HEIGHT,
+    width: HOTGIRL_CARD_WIDTH,
+    borderRadius: HOTGIRL_CARD_BORDER_RADIUS,
+  },
+  preloadedImage: {
+    width: 0,
+    height: 0,
+  },
 });
 
 class SwipeHotGirlScreen extends React.Component {
   static propTypes = {
     isFetching: PropTypes.bool.isRequired,
     currentHotGirl: PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      picture: PropTypes.string,
+      hearts: PropTypes.number,
+      description: PropTypes.string,
+    }),
+    nextHotGirl: PropTypes.shape({
       id: PropTypes.string,
       name: PropTypes.string,
       picture: PropTypes.string,
@@ -55,6 +77,7 @@ class SwipeHotGirlScreen extends React.Component {
 
   static defaultProps = {
     currentHotGirl: null,
+    nextHotGirl: null,
   };
 
   constructor(props) {
@@ -63,7 +86,7 @@ class SwipeHotGirlScreen extends React.Component {
     this.position = new Animated.ValueXY();
 
     this.panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: (evt, gestureState) => Math.abs(gestureState.dx) > 10,
       onPanResponderMove: (evt, gestureState) => {
         this.position.setValue({ x: gestureState.dx, y: getYValue(Math.abs(gestureState.dx)) });
       },
@@ -73,6 +96,7 @@ class SwipeHotGirlScreen extends React.Component {
         } else if (gestureState.dx < -SWIPE_THRESHOLD) {
           this.handleDiscard(this.props.currentHotGirl.id);
         } else {
+          // reset position of hotgirl card
           Animated.timing(this.position, {
             toValue: {
               x: 0,
@@ -89,7 +113,10 @@ class SwipeHotGirlScreen extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return this.props.currentHotGirl !== nextProps.currentHotGirl;
+    return (
+      this.props.currentHotGirl !== nextProps.currentHotGirl ||
+      this.props.nextHotGirl !== nextProps.nextHotGirl
+    );
   }
 
   componentWillUnmount() {
@@ -102,25 +129,29 @@ class SwipeHotGirlScreen extends React.Component {
       outputRange: [`${MAX_RAD}deg`, '0deg', `-${MAX_RAD}deg`],
     });
 
-    return {
-      ...this.position.getLayout(),
-      transform: [
-        {
-          rotate: rotateInterpolation,
-        },
-      ],
-    };
-  };
-
-  getCardOpacityStyle = () => {
     const opacityInterpolation = this.position.x.interpolate({
       inputRange: [-SCREEN_WIDTH, 0, SCREEN_WIDTH],
       outputRange: [0, 1, 0],
     });
 
-    return {
-      opacity: opacityInterpolation,
-    };
+    const colorInterpolation = this.position.x.interpolate({
+      inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
+      outputRange: ['orange', 'white', 'green'],
+    });
+
+    return [
+      styles.animatedContainer,
+      {
+        ...this.position.getLayout(),
+        backgroundColor: colorInterpolation,
+        opacity: opacityInterpolation,
+        transform: [
+          {
+            rotate: rotateInterpolation,
+          },
+        ],
+      },
+    ];
   };
 
   replaceHotgirl = () => {
@@ -169,18 +200,20 @@ class SwipeHotGirlScreen extends React.Component {
     });
   };
 
-  renderCard = (item) => {
-    if (item !== null) {
+  renderCard = () => {
+    if (this.props.currentHotGirl) {
       return (
         <Animated.View {...this.panResponder.panHandlers} style={this.getAnimatedStyle()}>
-          <Animated.View style={this.getCardOpacityStyle()}>
-            <HotgirlCard
-              hotgirl={item}
-              onDatePress={id => this.handleDate(id)}
-              onLovePress={id => this.handleLove(id)}
-              onDiscardPress={id => this.handleDiscard(id)}
-            />
-          </Animated.View>
+          <HotgirlCard
+            hotgirl={this.props.currentHotGirl}
+            onDatePress={id => this.handleDate(id)}
+            onLovePress={id => this.handleLove(id)}
+            onDiscardPress={id => this.handleDiscard(id)}
+          />
+          <Image
+            style={styles.preloadedImage}
+            source={{ uri: this.props.nextHotGirl ? this.props.nextHotGirl.picture : 'www' }}
+          />
         </Animated.View>
       );
     }
@@ -199,7 +232,7 @@ class SwipeHotGirlScreen extends React.Component {
 
   render() {
     if (!this.props.isFetching) {
-      return <View style={styles.container}>{this.renderCard(this.props.currentHotGirl)}</View>;
+      return <View style={styles.container}>{this.renderCard()}</View>;
     }
     return <LoadingSpinner size="large" color={MAIN_HIGHLIGHT_COLOR} />;
   }
@@ -207,7 +240,8 @@ class SwipeHotGirlScreen extends React.Component {
 
 const mapStateToProps = state => ({
   isFetching: state.hotgirls.isFetching,
-  currentHotGirl: state.hotgirls.hotgirls.length > 0 ? state.hotgirls.hotgirls[0] : null,
+  currentHotGirl: state.hotgirls.hotgirls.length >= 1 ? state.hotgirls.hotgirls[0] : null,
+  nextHotGirl: state.hotgirls.hotgirls.length >= 2 ? state.hotgirls.hotgirls[1] : null,
 });
 
 const mapDispatchToProps = dispatch => ({

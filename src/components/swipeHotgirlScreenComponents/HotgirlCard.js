@@ -7,7 +7,6 @@ import {
   TouchableWithoutFeedback,
   LayoutAnimation,
   Platform,
-  Dimensions,
 } from 'react-native';
 import PropTypes from 'prop-types';
 
@@ -15,12 +14,19 @@ import CommentsView from './CommentsView';
 
 import CustomButton from '../common/CustomButton';
 
+import {
+  HOTGIRL_CARD_HEIGHT,
+  HOTGIRL_CARD_WIDTH,
+  HOTGIRL_CARD_BORDER_RADIUS,
+} from '../../constants/dimensions';
+
 const styles = StyleSheet.create({
   container: {
+    height: HOTGIRL_CARD_HEIGHT,
+    width: HOTGIRL_CARD_WIDTH,
     justifyContent: 'flex-end',
     alignItems: 'stretch',
-    margin: 20,
-    borderRadius: 20,
+    borderRadius: HOTGIRL_CARD_BORDER_RADIUS,
     elevation: 1,
   },
   shadingContainer: {
@@ -143,10 +149,9 @@ class HotgirlCard extends React.Component {
     const {
       id, name, description, hearts, picture,
     } = hotgirl;
-    const { width, height } = Dimensions.get('window');
 
     return (
-      <View style={[styles.container, { width: width - 40, height: height - 40 }]}>
+      <View style={styles.container}>
         <TouchableWithoutFeedback onPress={this.handleExpand}>
           <Image style={styles.backgroundImageStyle} source={{ uri: picture }} />
         </TouchableWithoutFeedback>
